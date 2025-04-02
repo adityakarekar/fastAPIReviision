@@ -22,6 +22,9 @@ class UserRequest(BaseModel):
    password:str
    new_password:str=Field(min_length=6)
 
+class User_Phone_Update(BaseModel):
+    phone_number:str=Field(max_length=10)
+
 
 db_dependency=Annotated[Session,Depends(get_db)]
 user_dependency=Annotated[dict,Depends(get_current_user)]
@@ -44,6 +47,16 @@ def update_user_details(db:db_dependency,user:user_dependency,user_request:UserR
     if not bcrypt_context.verify(user_request.password,user_model.hashed_password):
         raise HTTPException(status_code=400,detail="Error on password change")
     user_model.hashed_password=bcrypt_context.hash(user_request.new_password)
+    db.add(user_model)
+    db.commit()
+
+
+@router.put("/update_user_phone",status_code=status.HTTP_204_NO_CONTENT)
+def update_user_phone_no(db:db_dependency,user:user_dependency,user_phone_update:User_Phone_Update):
+    if user is None:
+        raise HTTPException(status_code=404,detail="User not found")
+    user_model=db.query(Users).filter(Users.id==user.get("id")[0]).first()
+    user_model.phone_number=user_phone_update.phone_number
     db.add(user_model)
     db.commit()
 

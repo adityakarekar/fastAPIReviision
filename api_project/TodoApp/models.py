@@ -10,6 +10,7 @@ class Users(Base):
     last_name=Column(String)
     role=Column(String,nullable=False)
     hashed_password=Column(String)
+    phone_number=Column(String)
     is_active=Column(Boolean,default=True)
 
 class Todos(Base):
