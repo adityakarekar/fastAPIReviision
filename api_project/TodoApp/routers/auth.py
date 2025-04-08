@@ -4,10 +4,10 @@ from fastapi import APIRouter, Depends, HTTPException
 from jose import JWTError, jwt
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
-from models import Users
+from ..models import Users
 from passlib.context import CryptContext
 from starlette import status
-from database import SessionLocal
+from ..database import SessionLocal
 from fastapi.security import OAuth2PasswordRequestForm,OAuth2PasswordBearer
 router=APIRouter(prefix="/auth",tags=["auth"])
 
